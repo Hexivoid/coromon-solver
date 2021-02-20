@@ -10,6 +10,7 @@ function load() {
     $("#progress").hide()
     $("#imageSources").hide()
     $("#topStatusGrid").hide()
+    $("#confirmResusltsEntered").hide()
 }
 
 function difficultySelected(diff) {
@@ -34,11 +35,21 @@ function codeEnterConfirmed() {
     $("#confirmCodeEntered").fadeOut();
     setTimeout(function () {
         $("#topStatusGrid").fadeIn();
+        $("#confirmResusltsEntered").fadeIn()
         $("#direction").text("ENTER THE RESULTS BELOW:").fadeIn();
     }, 500);
+
+    setStatus(5, "correct")
+    setStatus(6, "incorrect")
+    setStatus(7, "invalid")
 }
 
 function setColor(slotNum, color) {
     var fuse = $("#" + color + "Fuse").clone()
     $("#slot" + slotNum).html(fuse)
+}
+
+function setStatus(slotNum, status) {
+    var status = $("#" + status).clone()
+    $("#slot" + slotNum).html(status)
 }
