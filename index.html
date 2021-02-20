@@ -9,10 +9,13 @@
 </head>
 <body onload="load()">
 <div id=difficultyContainer>
-    <select id=selectDifficulty onChange="difficultySelected(this.value);">
-        <option selected disabled hidden>Select difficulty</option>
-        <option>Easy</option>
-    </select>
+    <div style="margin-bottom: 10%;">
+        <select id=selectDifficulty onChange="difficultySelected(this.value);">
+            <option selected disabled hidden>Select difficulty</option>
+            <option>Easy</option>
+        </select>
+    </div>
+    <label style="font-size: 25px; font-family: Montserrat; color: white;">Can't use the dropdown? Refresh the page!</label>
 </div>
 <div id=progress style="width: 50%; margin: auto; margin-top: 8%; text-align: center;">
     <label id=direction>ENTER THE FOLLOWING CODE IN GAME:</label>
@@ -29,30 +32,36 @@
         </div>
         <div>
             <button id="slot6"></button>
-            <select id=correctNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+            <select id=inorrectNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
         </div>
         <div>
             <button id="slot7"></button>
-            <select id=correctNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+            <select id=invalidNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
         </div>
     </div>
     <div style="width: 40%; display: table; margin: 0 auto;">
         <span id=confirmCodeEnteredParent onclick="codeEnterConfirmed()">
             <div id=confirmCodeEntered>I entered the code above</div>
         </span>
-    <button id=confirmResusltsEntered>I entered the results above</button>
-    </div>
-    <div id=results style="margin-top: 5%;">
-        <label></label>
-        <label></label>
-        <label></label>
-        <label></label>
-        <label></label>
-        <label></label>
-        <label></label>
+    <button id=confirmResusltsEntered onclick="resultsEnterConfirmed()">I entered the results from the game</button>
     </div>
 </div>
-
+<div id=historyContainer>
+    <div id=historyName style="text-align: center; margin: auto; margin-top: 5%; border-bottom: 1px solid #818181; padding: 10px; width: 20%;">
+        <label style=" font-size: 20px; font-family: Montserrat; color: 818181;">History</label>
+    </div>
+    <div id=historyList style="margin-top: 1%; position">
+        <div class=results style="margin: auto; margin-bottom: 1%; text-align: center;">
+            <label></label>
+            <label></label>
+            <label></label>
+            <label></label>
+            <label></label>
+            <label></label>
+            <label></label>
+        </div>
+    </div>
+</div>
 <div id=imageSources>
     <img id="greenFuse" src="img/greenFuse.png" ondragstart="return false;"></img>
     <img id="redFuse" src="img/redFuse.png" ondragstart="return false;"></img>
