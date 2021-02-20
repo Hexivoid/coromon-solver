@@ -23,14 +23,24 @@
         <button id="slot4"></button>
     </div>
     <div id=topStatusGrid style="margin-top: 5%; margin-bottom: 3%;">
-        <button id="slot1"></button>
-        <button id="slot2"></button>
-        <button id="slot3"></button>
+        <div>
+            <button id="slot5"></button>
+            <select id=correctNum><option>0</option><option>1</option><option>2</option><option>3</option></select>
+        </div>
+        <div>
+            <button id="slot6"></button>
+            <select id=correctNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        </div>
+        <div>
+            <button id="slot7"></button>
+            <select id=correctNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        </div>
     </div>
     <div style="width: 40%; display: table; margin: 0 auto;">
         <span id=confirmCodeEnteredParent onclick="codeEnterConfirmed()">
             <div id=confirmCodeEntered>I entered the code above</div>
         </span>
+    <button id=confirmResusltsEntered>I entered the results above</button>
     </div>
     <div id=results style="margin-top: 5%;">
         <label></label>
@@ -49,6 +59,10 @@
     <img id="blueFuse" src="img/blueFuse.png" ondragstart="return false;"></img>
     <img id="orangeFuse" src="img/orangeFuse.png" ondragstart="return false;"></img>
     <img id="yellowFuse" src="img/yellowFuse.png" ondragstart="return false;"></img>
+
+    <img id="correct" src="img/correct.png" ondragstart="return false;"></img>
+    <img id="incorrect" src="img/incorrect.png" ondragstart="return false;"></img>
+    <img id="invalid" src="img/invalid.png" ondragstart="return false;"></img>
 </div>
 
 </body>
