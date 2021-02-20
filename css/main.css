@@ -1,0 +1,74 @@
+#difficultyContainer {
+    text-align: center;
+    margin-top: 15%;
+}
+
+#selectDifficulty {
+    border: 2px solid #818181;
+    border-radius: 50px;
+    font-family: Montserrat;
+    font-size: 40px;
+    color: 818181;
+    background-color: transparent;
+    padding: 3%;
+    outline: none;
+}
+
+#topColorGrid, #topStatusGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 2px solid #818181;
+    border-radius: 50px;
+}
+
+#topColorGrid > button, #topStatusGrid > button {
+    background-color: transparent;
+    pointer-events: none;
+    border: none;
+    margin: 10%;
+}
+
+#confirmCodeEntered {
+    background-color: transparent;
+    border: 1px solid #818181;
+
+    color: 818181;
+    font-size: 20px;
+    font-family: Montserrat;
+
+    padding: 2%;
+    pointer-events: none;
+}
+
+#confirmCodeEnteredParent {
+    width: 50%;
+}
+
+#confirmCodeEnteredParent:hover #confirmCodeEntered {
+    background-color: #818181;
+    user-select: none;
+    color: 161618;
+}
+
+#results {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border: none;
+}
+
+#direction {
+    color: #818181;
+    font-family: Montserrat;
+    font-size: 30px;
+    user-select: none;
+}
+
+img {
+    image-rendering: pixelated;
+    user-select: none;
+    width: 40px;
+}
+
+body {
+    background-color: 161618;
+}
