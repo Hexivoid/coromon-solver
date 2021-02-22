@@ -1,13 +1,15 @@
 <html>
 <head>
     <title>Coromon Code Solver</title>
+    <link rel="icon" href="favicon.png">
     <link rel="stylesheet" href="css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="js/guess.js"></script>
+    <script src="js/math.js"></script>
     <style>@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');</style>
     <style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');</style>
 </head>
-<body onload="load()">
+<body onload="load()" style="user-select: none;">
 <div id=difficultyContainer>
     <div style="margin-bottom: 10%;">
         <select id=selectDifficulty onChange="difficultySelected(this.value);">
@@ -33,7 +35,7 @@
         </div>
         <div>
             <button id="slot6"></button>
-            <select id=inorrectNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+            <select id=incorrectNum><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
         </div>
         <div>
             <button id="slot7"></button>
@@ -47,7 +49,7 @@
     <button id=confirmResusltsEntered onclick="resultsEnterConfirmed()">I entered the results from the game</button>
     </div>
 </div>
-<div id=historyContainer>
+<div id=historyContainer style="user-select: none;">
     <div id=historyName style="text-align: center; margin: auto; margin-top: 5%; border-bottom: 1px solid #818181; padding: 10px; width: 20%;">
         <label style=" font-size: 20px; font-family: Montserrat; color: 818181;">History</label>
     </div>
