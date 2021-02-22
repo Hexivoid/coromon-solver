@@ -1,15 +1,14 @@
-var color1 = {name: "green", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
-var color2 = {name: "red", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
-var color3 = {name: "blue", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
-var color4 = {name: "orange", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
-var color5 = {name: "yellow", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
+var green = {name: "green", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
+var red = {name: "red", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
+var blue = {name: "blue", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
+var orange = {name: "orange", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
+var yellow = {name: "yellow", possiblePos: [], incorrectPos: [], correctPos: "", isInvalid:""};
 
-var attemptNum = 1;
-var fusesAttemptedNum;
+var attempt = 1;
 
-var correctNum;
-var incorrectNum;
-var invalidNum;
+var correct;
+var incorrect;
+var invalid;
 
 var slotAttemptColor = []
 var slotAttemptStatus = []
@@ -27,19 +26,11 @@ function difficultySelected(diff) {
     $("#difficultyContainer").fadeOut();
     setTimeout(function () {
         $("#progress").fadeIn();
-        attempt(attemptNum)
+        //math()
+        setColor(2, "red");
+        setColor(3, "blue");
     }, 500);
 }
-
-function attempt(attemptNum) {
-    slotAttemptColor = [] //resetting
-    slotAttemptStatus = [] //resetting
-    if (attemptNum == 1) {
-        setColor(2, "red")
-        setColor(3, "blue")
-        fusesAttemptedNum = 2;
-    }
-} //Could also ++ next attempt (attemptNum) above
 
 function codeEnterConfirmed() {
     $("#topColorGrid").fadeOut();
@@ -51,25 +42,25 @@ function codeEnterConfirmed() {
         $("#topStatusGrid").fadeIn();
         $("#confirmResusltsEntered").fadeIn()
         $("#direction").text("ENTER THE RESULTS BELOW:").fadeIn();
-        if ($("#historyContainer:hidden")) { //Fade in if hidden
-            $("#historyContainer").fadeIn()
-        }
+        //if ($("#historyContainer:hidden")) { //Fade in if hidden
+        $("#historyContainer").fadeIn()
+        //}
     }, 500);
     //Could put the 3 below in the grid itself, will have to rework CSS
     setStatus(5, "correct")
     setStatus(6, "incorrect")
     setStatus(7, "invalid")
     //console.log(color1.invalid);
-
 }
 
 function resultsEnterConfirmed() {
-    correctNum = parseInt($("#correctNum :selected").val())
-    incorrectNum = parseInt($("#inorrectNum :selected").val())
-    invalidNum = parseInt($("#invalidNum :selected").val())
+    correct = parseInt($("#correctNum :selected").val());
+    incorrect = parseInt($("#incorrectNum :selected").val());
+    invalid = parseInt($("#invalidNum :selected").val());
 
-    var totalAttemptsEntered = correctNum+incorrectNum+invalidNum
-    console.log(slotAttemptColor.filter(Boolean).length)
+    var totalAttemptsEntered = correct+incorrect+invalid
+    //console.log(slotAttemptColor)
+    //console.log("Slots filled by algorithm: " + slotAttemptColor.filter(Boolean).length)
     if (totalAttemptsEntered != slotAttemptColor.filter(Boolean).length) {
         window.alert("You entered invalid results. Please input correct results or refresh the page to restart.")
     } else {
@@ -83,8 +74,13 @@ function resultsEnterConfirmed() {
             $("#confirmCodeEntered").fadeIn();
             $("#historyContainer").fadeIn(); //Like I said, back in!
             addHistoryStatus()
+            $("#correctNum").val("0");
+            $("#incorrectNum").val("0");
+            $("#invalidNum").val("0");
         }, 500);
-        attempt(attemptNum++) //Next attempt
+        tryColors = slotAttemptColor
+        slotAttemptColor = []
+        math() //Next attempt
     }
 }
 
@@ -92,7 +88,14 @@ function setColor(slotNum, color) {
     var fuse = $("#" + color + "Fuse").clone()
     $("#slot" + slotNum).html(fuse)
     slotAttemptColor[slotNum] = color;
+
     //window["slot" + slotNum + "Attempt"] = color
+}
+
+function clearBoard() {
+    for (i=1;i<5;i++) {
+        $("#slot" + i).html("")
+    }
 }
 
 function setStatus(slotNum, status) {
@@ -102,26 +105,27 @@ function setStatus(slotNum, status) {
 }
 
 function addHistory() {
-    var history = $(".results:last").clone()
-    for (i = 1; i < 4; i++) {
-        var fuse = $("#" + slotAttemptColor[i] + "Fuse").clone()
-        history.find("label").eq(i-1).html(fuse)
+    var history = $(".results:first").clone()
+    for (i = 0; i < 4; i++) { //Not 3??
+        //console.log("i: " + i)
+        var fuse = $("#" + slotAttemptColor[i+1] + "Fuse").clone()
+        history.find("label").eq(i).html(fuse) //Could also make 4 to 3 and make i-1 here and above remove +1
     }
-    console.log(correctNum)
-    $("#historyList").prepend(history).hide().fadeIn()
-    /*for (i = 5; i < 7; i++) {
-        var statusImg = $(slotAttemptStatus[i]).clone()
-        history.find("label").eq(i-1).html(statusImg)
-    }*/
-    //#correctNum
+    //console.log(correct)
+    $("#historyList").append(history).hide().fadeIn()
 }
 
 function addHistoryStatus() {
-    var history = $(".results").eq(0);
-    history.find("label").eq(4).text(correctNum);
-    history.find("label").eq(5).text(incorrectNum);
-    history.find("label").eq(6).text(invalidNum);
-    correctNum = "";
-    incorrectNum = "";
-    invalidNum = "";
+    var history = $(".results:last");
+    history.find("label").eq(4).text(correct);
+    history.find("label").eq(5).text(incorrect);
+    history.find("label").eq(6).text(invalid);
+    correct = "";
+    incorrect = "";
+    invalid = "";
+    tryColors = []
+}
+
+function complete() {
+    $("#confirmCodeEntered").text("The code was cracked. Click to restart.")
 }
