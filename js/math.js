@@ -2,7 +2,8 @@
 var finalColors = []
 var tryColors = [] //The color in what slot (index)
 var tryCombo;
-var twoDone = {status: false, firstColor: "", firstNum: "", secondColor: "", secondNum: ""}
+var colors = ["red", "blue", "green", "orange", "yellow"]
+var foundInvalid = false;
 
 var slot1 = {known: false, possible: ["red", "blue", "green", "orange", "yellow"]}
 var slot2 = {known: false, possible: ["red", "blue", "green", "orange", "yellow"]}
@@ -11,31 +12,93 @@ var slot4 = {known: false, possible: ["red", "blue", "green", "orange", "yellow"
 
 function math() {
     clearBoard()
-    if (getNumOfSlotsFilled() == 2) {
-        if (correct == 2) { //Both 2/2 are correct
-            setKnown(findSlotFilled(1), tryColors[findSlotFilled(1)])
-            setKnown(findSlotFilled(2), tryColors[findSlotFilled(2)])
-            findOnesPossibilities()
-            setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
-        } else if (incorrect == 2) {
-            removeColor(findSlotFilled(1), tryColors[findSlotFilled(1)])
-            removeColor(findSlotFilled(2), tryColors[findSlotFilled(2)])
-            findOnesPossibilities()
-            setColor(firstEmptySlot(), tryColors[findSlotFilled(1)]);
+    findOnesPossibilities()
+    console.log("known num: " + getKnownCount())
+    console.log("finalColors: " + finalColors)
+    if (getKnownCount() == 3) {
+        if (invalid == 1) {
+            console.log("4")
+            removeColorFromAll(tryColors[findSlotFilled(1)])
+        } else if (correct == 1) {
+            setKnown(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0])
         }
-    } else if (getNumOfSlotsFilled() == 1) {
+        console.log("1")
+        if (window["slot" + firstEmptySlot()].possible.length == 2) {
+            setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+            console.log("2")
+        } else { //If only one option left and whole combo is known!!!
+            console.log("3")
+            setKnown(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0])
+            for (var s = 1; s < 5; s++) {
+                setColor(s, finalColors[s]);
+                complete()
+            }
+        }
+    } else if (getKnownCount() == 2) {
+        console.log("Adggda " + window["slot" + firstEmptySlot()].possible.length)
         if (correct == 1) {
-            //console.log("awww " + tryColors[findSlotFilled(1)])
-            setKnown(findSlotFilled(1), tryColors[findSlotFilled(1)])
+            setKnown(firstEmptySlot(), tryColors[findSlotFilled(1)]) //Or findSlotFilled(1) for first parameter
             findOnesPossibilities()
-            console.log("test " + firstEmptySlot())
             setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
         } else if (incorrect == 1) {
             removeColor(findSlotFilled(1), tryColors[findSlotFilled(1)])
+            setKnown(secondEmptySlot(), tryColors[findSlotFilled(1)]) //check this and line above
             findOnesPossibilities()
+            if (foundInvalid == true) {
+                setKnown(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0])
+            } else if (foundInvalid == false) {
+                setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+            }
+        } else if (invalid == 1) {
+            removeColorFromAll(tryColors[findSlotFilled(1)])
+            console.log("setting")
             setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
         }
+    } else {
+        if (getNumOfSlotsFilled() == 2) {
+            if (correct == 2) { //Both 2/2 are correct
+                setKnown(findSlotFilled(1), tryColors[findSlotFilled(1)])
+                setKnown(findSlotFilled(2), tryColors[findSlotFilled(2)])
+                findOnesPossibilities()
+                setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+            } else if (incorrect == 2) {
+                removeColor(findSlotFilled(1), tryColors[findSlotFilled(1)])
+                removeColor(findSlotFilled(2), tryColors[findSlotFilled(2)])
+                findOnesPossibilities()
+                setColor(firstEmptySlot(), tryColors[findSlotFilled(1)]);
+            } else if (invalid == 1) { //Bottom can't be correct, already mentioned above
+                findOnesPossibilities()
+                if (foundInvalid == false) {
+                    console.log(tryColors)
+                    setColor(firstEmptySlot(), tryColors[findSlotFilled(1)]);
+                    setColor(secondEmptySlot(), window["slot" + firstEmptySlot()].possible[2]);
+                } else if (foundInvalid == true) {
+                    setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+                }
+            } else if (correct == 1) {
+                if (incorrect == 1) {
+                } else if (invalid == 1) {
+                }
+            }
+        } else if (getNumOfSlotsFilled() == 1) {
+            if (correct == 1) {
+                //console.log("awww " + tryColors[findSlotFilled(1)])
+                setKnown(findSlotFilled(1), tryColors[findSlotFilled(1)])
+                findOnesPossibilities()
+                console.log("test " + firstEmptySlot())
+                setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+            } else if (incorrect == 1) {
+                removeColor(findSlotFilled(1), tryColors[findSlotFilled(1)])
+                findOnesPossibilities()
+                setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+            } else if (invalid == 1) {
+                removeColorFromAll(tryColors[findSlotFilled(1)])
+                findOnesPossibilities()
+                setColor(firstEmptySlot(), window["slot" + firstEmptySlot()].possible[0]);
+            }
+        }
     }
+
 
 
 
@@ -50,39 +113,72 @@ function math() {
 }
 
 function findOnesPossibilities() {
-    var colors = ["red", "blue", "green", "orange", "yellow"]
+    removeInvalids()
     for(i = 0; i < 2; i++) {
-        for (var c = 1; c < 6; c++){
-            if (getPossibleSlotsForColor(colors[c]).length == 1) { //
-                for (var s = 1; s < 5; s++) {
-                    if (window["slot" + s].possible.includes(colors[c]) == true) {
-                        setKnown(s, colors[c])
-                        console.log("found")
+        if (foundInvalid == true) {
+            for (var c = 1; c < colors.length+1; c++){
+                //console.log("is " + colors[c-1] + " "+ getPossibleSlotsForColor(colors[c-1]))
+                if (getPossibleSlotsForColor(colors[c-1]) == 1) { // If color can only be in one slot find the slot
+                    console.log("woooh")
+                    for (var s = 1; s < 5; s++) {
+                        if (window["slot" + s].possible.includes(colors[c-1]) == true) {
+                            //console.log("knownasf : " + s + " " + colors[c-1])
+                            setKnown(s, colors[c-1])
+                            //console.log("found")
+                        }
                     }
                 }
-            } //Below if is not invalid and can only be in one slot
-            /*var count = 0;
-            var s;
-            var indexSlot;
-            for (s = 1; s < 5; s++) {
-                if (window["slot" + s].possible.includes(colors[c]) == true) {
-                    count++;
-                    indexSlot = s;
-                }
             }
-            if (count == 1) {
-                removeFromArray(window["slot" + indexSlot].possible, colors[c])
-            }*/
         }
     }
 }
 
+function removeInvalids() {
+    var prevInvalidCount= $(".results").last().prev().find("label").eq(6).html() //Seeing if there was one invalid last time
+    if (prevInvalidCount == 1) {
+        var oldColors = [] //Previous colors to check
+        for (var s = 0; s < 4; s++) { //Adds the previous colors to oldColors, probs had an easier way of doing this
+            var oldColorTemp = $(".results").last().prev().find("label").eq(s).html()
+            if (oldColorTemp != "") {
+                oldColors[s+1] = getColorFromHTML(oldColorTemp)
+            } else { //Avoids stuff below to make sure slots ain't undefined?
+                oldColors[s+1] = ""
+            }
+        }
+        for (var i = 1; i < 4; i++) {
+            for (var a = 1; a < 4; a++ ) { //Loops old and new colors to compare
 
+                if (tryColors[i] != undefined && oldColors[a] != undefined) { //Or ""?
 
+                    if (tryColors[i] == oldColors[a]) { //When match found see if result was invalid or not
+                        foundInvalid = true;
+                        console.log("found it " + tryColors[i] + " " + oldColors[a])
+                        if (invalid == 1) { //If color is found in both before and now and still is invalid, remove it
+                            console.log(oldColors[a] + " invalid ")
+                            removeColorFromAll(oldColors[a])
+                        } else { //Both correct or incorrect, remove the other number from last try
+                            console.log(oldColors[a] + " invalid ")
+                            removeFromArray(oldColors, oldColors[a])
+                            removeColorFromAll(oldColors[oldColors.indexOf(oldColors[a])])
+                        }
+                    }
+                }
 
+            }
+        }
+    }
+}
 
+function getColorFromHTML(html) {
+    var colorChoices = ["red", "blue", "green", "orange", "yellow"]
+    for (var c = 0; c < 5; c++) {
+        if (html.includes(colorChoices[c])) {
+            return colorChoices[c]
+        }
+    }
+}
 
-function getPossibleSlotsForColor(color) {
+function getPossibleSlotsForColor(color) { //Returns the number of slots that have the color as possible
     var count = 0;
     for (var i = 1; i < 5; i++) {
         if (window["slot" + i].possible.includes(color) == true) {
@@ -91,75 +187,6 @@ function getPossibleSlotsForColor(color) {
     }
     return count;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*if (correct == 2) { //If slot 2 is red and slot 3 blue
-
-        setKnown(2, "red")
-        setKnown(3, "blue")
-        setColor(1, "green");
-
-    } else if (correct == 1) {
-
-        if (incorrect == 1) { //If one correct and one incorrect
-
-            setColor(2, "red");
-
-        } else if (invalid == 1) {
-
-        }
-    } else if (getKnownCount() > 1) {
-        //console.log("first slot: " + firstEmptySlot())
-        //console.log(getKnownCount());
-        if (getKnownCount() == (2 || 3)) {
-            if (correct == 1) {
-                console.log("is correct")
-                setKnown(firstEmptySlot(), window["slot"+firstEmptySlot()].possible[0])
-                //removeColor(firstEmptySlot(), window["slot"+firstEmptySlot()].possible[0])
-                console.log("labeled as correct")
-            }
-            var emptySlot = firstEmptySlot()
-            var colorToTry = window["slot"+emptySlot].possible[0]
-            setColor(emptySlot, colorToTry);
-        } else if (getKnownCount() == 4) {
-            console.log("set to correct")
-        }
-    } else {
-
-        //console.log("getKnownCount: " + getKnownCount())
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-    /*console.log(slot1)
-    console.log(slot2)
-    console.log(slot3)
-    console.log(slot4)*/
-
 
 function removeColor(slot, color) {
     slotVar = window["slot" + slot]
@@ -170,10 +197,17 @@ function removeColor(slot, color) {
 }
 
 function setKnown(slot, color) {
+    console.log("known " + slot + " " + color);
     slotVar = window["slot" + slot]
     slotVar.possible = []
     slotVar.known = true
     finalColors[slot] = color
+    console.log("ADFFDADFFDA " + finalColors[slot])
+    removeColorFromAll(color)
+}
+
+function removeColorFromAll(color) { //Removes color from all possibles
+    console.log("removing " + color)
     for (var s = 1; s < 5; s++) {
         if(window["slot" + s].possible.includes(color)) {
             removeFromArray(window["slot" + s].possible, color)
@@ -186,6 +220,19 @@ function firstEmptySlot() {
         if(window["slot" + s].known == false) {
             return s
             s = 6 //Exits loop
+        }
+    }
+}
+
+function secondEmptySlot() {
+    var found = 0;
+    for (var s = 1; s < 5; s++) {
+        if(window["slot" + s].known == false) {
+            found++
+            if (found == 2) {
+                return s;
+                s = 6 //Exits loop
+            }
         }
     }
 }

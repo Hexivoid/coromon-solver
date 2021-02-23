@@ -33,6 +33,10 @@ function difficultySelected(diff) {
 }
 
 function codeEnterConfirmed() {
+    //console.log($("#direction").text())
+    if (getKnownCount() == 4) {
+        location.reload()
+    } //guess I don't need an else after!!
     $("#topColorGrid").fadeOut();
     $("#direction").fadeOut();
     $("#confirmCodeEntered").fadeOut();
@@ -70,7 +74,7 @@ function resultsEnterConfirmed() {
         $("#historyContainer").fadeOut(); //Out and back in below
         setTimeout(function () {
             $("#topColorGrid").fadeIn();
-            $("#direction").text("ENTER THE FOLLOWING CODE IN GAME:").fadeIn();
+            $("#direction").fadeIn();
             $("#confirmCodeEntered").fadeIn();
             $("#historyContainer").fadeIn(); //Like I said, back in!
             addHistoryStatus()
@@ -88,7 +92,6 @@ function setColor(slotNum, color) {
     var fuse = $("#" + color + "Fuse").clone()
     $("#slot" + slotNum).html(fuse)
     slotAttemptColor[slotNum] = color;
-
     //window["slot" + slotNum + "Attempt"] = color
 }
 
@@ -128,4 +131,5 @@ function addHistoryStatus() {
 
 function complete() {
     $("#confirmCodeEntered").text("The code was cracked. Click to restart.")
+    $("#direction").text("THE CODE WAS CRACKED")
 }
